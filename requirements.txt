@@ -1,0 +1,5 @@
+cloudpickle==2.0.0
+gym==0.21.0
+numpy==1.22.2
+pyglet==1.5.21
+six==1.16.0
