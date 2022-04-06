@@ -2,11 +2,16 @@ import gym
 
 import numpy as np
 import random
+import os
 
 import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers import Adam # - Works
+from tensorflow.keras.callbacks import ModelCheckpoint
+
+# Refer to link bellow to make video and save weights 
+# https://towardsdatascience.com/deep-reinforcement-learning-build-a-deep-q-network-dqn-to-play-cartpole-with-tensorflow-2-and-gym-8e105744b998
 
 
 # Definable Parameters
@@ -71,23 +76,31 @@ class dqn:
             state = state.reshape((1, self.observation_space))
 
 
-            self.model.fit(state, expectedQ,verbose=0)
+            self.model.fit(state, expectedQ,callbacks=[self.cp_callback], verbose=0)
 
         if self.exploration_rate > EXPLORATION_MIN:
             self.exploration_rate = self.exploration_rate*EXPLORATION_DECAY
        
         
-        
-        
-            
     
     def make_model(self):
         self.model = keras.Sequential()
         self.model.add(layers.Dense(2, input_shape=(self.observation_space,), activation="relu"))
-        self.model.add(layers.Dense(24, activation="relu"))
-        self.model.add(layers.Dense(24, activation="relu"))
+        self.model.add(layers.Dense(24, activation="tanh"))
+        self.model.add(layers.Dense(24, activation="tanh"))
         self.model.add(layers.Dense(self.action_space, activation="linear"))
         self.model.compile(loss="mse", optimizer=Adam(lr=LEARNING_RATE))
+
+        self.checkpoint_path = "training_1/cp.ckpt"
+        self.checkpoint_dir = os.path.dirname(self.checkpoint_path)
+        self.cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=self.checkpoint_path,
+                                                 save_weights_only=True,
+                                                 save_freq=5*BATCH_SIZE,
+                                                 verbose=0)
+    
+    def load_model(self):
+        self.model.load_weights(self.checkpoint_path)
+
 
   
 
