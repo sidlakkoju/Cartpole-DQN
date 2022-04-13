@@ -4,7 +4,7 @@ from cart_pole import agent
 
 agent = agent()
 agent.load_model()
-agent.epsilon = 0.01
+agent.epsilon = 0.00
 
 for i_episode in range(300):
     observation = agent.env.reset()

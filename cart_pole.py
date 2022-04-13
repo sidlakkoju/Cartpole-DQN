@@ -13,8 +13,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 LEARNING_RATE = 0.001       # Learning Rate of the Model
 GAMMA = 0.95                # Discount Factor
 EPSILON_MAX = 0.30           # Start with only random actions (for maximum exploration) 
-EPSILON_MIN = 0.02          # Minimum exploration (Epsilon Greedy)
-EPSILON_DECAY = 0.99       # Epsilon decay rate (decays after every taken action)
+EPSILON_MIN = 0.01          # Minimum exploration (Epsilon Greedy)
+EPSILON_DECAY = 0.992       # Epsilon decay rate (decays after every taken action)
 
 BATCH_SIZE = 16             # Size of each sample batch used for model training
 MEMORY_SIZE = 2000          # Size of memory 
@@ -138,28 +138,8 @@ class agent:
 
 
     # ---------------- END OF AGENT CLASS ---------------- # 
-
-
-
-
-# Function to run a trained model. Model weights retrieved from specified load path in definable paramters.
-def runModel():
-    agent = agent()
-    agent.load_model()
-    agent.epsilon = 0.01    # done to ensure action command doesn't return random actions
-    for episode in range(300):
-        observation = agent.env.reset()
-        t = 0
-        while True:
-            t+=1
-            agent.env.render()
-            action = agent.action(observation)                          # get action
-            observation, reward, done, info = agent.env.step(action)    # take action
-            if done:
-                print("Episode finished after {} timesteps".format(t+1))
-                break
-    agent.env.close()
-            
+    
+                
 
 # The main function. Trains model.
 if __name__ == "__main__":
