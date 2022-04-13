@@ -12,8 +12,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 # Definable Parameters
 LEARNING_RATE = 0.001       # Learning Rate of the Model
 GAMMA = 0.95                # Discount Factor
-EPSILON_MAX = 1.0           # Start with only random actions (for maximum exploration) 
-EPSILON_MIN = 0.01          # Minimum exploration (Epsilon Greedy)
+EPSILON_MAX = 0.30           # Start with only random actions (for maximum exploration) 
+EPSILON_MIN = 0.02          # Minimum exploration (Epsilon Greedy)
 EPSILON_DECAY = 0.99       # Epsilon decay rate (decays after every taken action)
 
 BATCH_SIZE = 16             # Size of each sample batch used for model training
@@ -22,7 +22,7 @@ MEMORY_SIZE = 2000          # Size of memory
 ENVIRONMENT = 'CartPole-v0' # Gym environment
 
 # Checkpoint path and load path kept separate to prevent accidental over-writing of saved model weights
-CHECKPOINT_PATH = "cartpole_training_3/cp.ckpt"
+CHECKPOINT_PATH = "cartpole_training_5/cp.ckpt"
 LOAD_PATH= "cartpole_training_2/cp.ckpt"            # The saved model was trained for 150 episodes
 
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     # Create a DQN agent. 
     agent = agent()
-    # agent.load_model()      # Uncomment if you'd like to resume training from a previously saved model. Make sure to update LOAD_PATH in definable parameters.
+    agent.load_model()      # Uncomment if you'd like to resume training from a previously saved model. Make sure to update LOAD_PATH in definable parameters.
     episode_counter = 0
 
     for episode in range(2000):
@@ -183,7 +183,7 @@ if __name__ == "__main__":
             next_state, reward, done, info = agent.env.step(action)
 
             # Punish agent if he/she looses
-            reward = reward if not done else -1   
+            # reward = reward if not done else -1   
 
             # Add to memory dequeue
             agent.remember(state, action, reward, next_state, done)
